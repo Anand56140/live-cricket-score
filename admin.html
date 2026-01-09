@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Cricket Score Admin</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+  <style>
+    body {
+      font-family: Arial;
+      background: #0b132b;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+    .box {
+      background: #1c2541;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 400px;
+      margin: auto;
+    }
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      font-size: 16px;
+    }
+    button {
+      background: #5bc0be;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="box">
+    <h2>🏏 Score Admin Panel</h2>
+
+    <input id="teamA" placeholder="Team A name">
+    <input id="teamB" placeholder="Team B name">
+    <input id="runs" type="number" placeholder="Runs">
+    <input id="wickets" type="number" placeholder="Wickets">
+    <input id="overs" placeholder="Overs (e.g. 12.3)">
+    <input id="status" placeholder="Match status">
+
+    <button onclick="updateScore()">Update Score</button>
+  </div>
+
+  <script>
+    // 🔴 SAME Firebase config as index.html
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_PROJECT.firebaseapp.com",
+      databaseURL: "https://YOUR_PROJECT-default-rtdb.firebaseio.com",
+      projectId: "YOUR_PROJECT",
+      storageBucket: "YOUR_PROJECT.appspot.com",
+      messagingSenderId: "XXXXXX",
+      appId: "XXXXXX"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    function updateScore() {
+      db.ref("match").set({
+        teamA: document.getElementById("teamA").value,
+        teamB: document.getElementById("teamB").value,
+        runs: Number(document.getElementById("runs").value),
+        wickets: Number(document.getElementById("wickets").value),
+        overs: document.getElementById("overs").value,
+        status: document.getElementById("status").value
+      });
+
+      alert("Score Updated Successfully!");
+    }
+  </script>
+</body>
+</html>
