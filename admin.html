@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Cricket Score Admin</title>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cricket Score Admin</title>
 
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
@@ -37,8 +37,8 @@
     }
   </style>
 </head>
-
 <body>
+
   <div class="box">
     <h2>🏏 Score Admin Panel</h2>
 
@@ -46,14 +46,14 @@
     <input id="teamB" placeholder="Team B name">
     <input id="runs" type="number" placeholder="Runs">
     <input id="wickets" type="number" placeholder="Wickets">
-    <input id="overs" placeholder="Overs (e.g. 12.3)">
+    <input id="overs" placeholder="Overs (e.g., 12.3)">
     <input id="status" placeholder="Match status">
 
     <button onclick="updateScore()">Update Score</button>
   </div>
 
   <script>
-    // 🔴 SAME Firebase config as index.html
+    // 🔴 Replace with your Firebase project config
     const firebaseConfig = {
       apiKey: "YOUR_API_KEY",
       authDomain: "YOUR_PROJECT.firebaseapp.com",
