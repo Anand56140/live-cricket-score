@@ -1,192 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Live Cricket Score</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Live Cricket Score</title>
 
-<style>
-body {
-  margin: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background: linear-gradient(135deg, #03045e, #023e8a);
-  color: #fff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
-.card {
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(10px);
-  border-radius: 16px;
-  padding: 25px;
-  width: 380px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-}
-
-h1 {
-  text-align: center;
-  font-size: 20px;
-  color: #90e0ef;
-}
-
-.score {
-  font-size: 40px;
-  font-weight: bold;
-  text-align: center;
-}
-
-.overs {
-  text-align: center;
-  color: #ade8f4;
-}
-
-/* PLAYER INFO */
-.players {
-  margin-top: 15px;
-  background: rgba(255,255,255,0.05);
-  padding: 12px;
-  border-radius: 10px;
-}
-
-.player {
-  display: flex;
-  justify-content: space-between;
-  margin: 6px 0;
-}
-
-.arrow {
-  color: #38b000;
-  margin-right: 6px;
-}
-
-/* BALL DISPLAY */
-.balls {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 18px;
-}
-
-.ball {
-  width: 45px;
-  height: 45px;
-  border-radius: 50%;
-  background: #0077b6;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-weight: bold;
-}
-
-.ball.six { background: #38b000; }
-.ball.four { background: #ffb703; color: #000; }
-.ball.wicket { background: #d00000; }
-
-.status {
-  text-align: center;
-  margin-top: 10px;
-  color: #48cae4;
-  font-size: 14px;
-}
-
-.bowler {
-  text-align: center;
-  margin-top: 10px;
-  font-size: 15px;
-  color: #ffd166;
-}
-</style>
+  <style>
+    body {
+      font-family: Arial;
+      background: #0b132b;
+      color: white;
+      text-align: center;
+      padding: 30px;
+    }
+    .box {
+      background: #1c2541;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 400px;
+      margin: auto;
+    }
+    h1 { color: #5bc0be; }
+    .score { font-size: 32px; margin: 15px 0; }
+    .overs, .status { font-size: 18px; margin: 5px 0; }
+  </style>
 </head>
-
 <body>
 
-<div class="card">
-  <h1 id="teams">Team A vs Team B</h1>
-
-  <div class="score" id="score">0 / 0</div>
-  <div class="overs" id="overs">Overs: 0.0</div>
-
-  <div class="players">
-    <div class="player" id="strikerRow">
-      <div><span id="strikerArrow" class="arrow">▶</span> <span id="striker">Striker</span></div>
-      <div>Batting</div>
-    </div>
-    <div class="player" id="nonStrikerRow">
-      <div><span id="nonStrikerArrow" class="arrow" style="visibility:hidden;">▶</span> <span id="nonStriker">Non Striker</span></div>
-      <div>Batting</div>
-    </div>
+  <div class="box">
+    <h1>🏏 Live Cricket Score</h1>
+    <p id="teams">Loading...</p>
+    <div class="score" id="score">--/--</div>
+    <p class="overs" id="overs">Overs: --</p>
+    <p class="status" id="status">Status: --</p>
   </div>
 
-  <div class="bowler" id="bowler">Bowler: -</div>
+  <script>
+    // 🔴 Replace with your Firebase project config
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_PROJECT.firebaseapp.com",
+      databaseURL: "https://YOUR_PROJECT-default-rtdb.firebaseio.com",
+      projectId: "YOUR_PROJECT",
+      storageBucket: "YOUR_PROJECT.appspot.com",
+      messagingSenderId: "XXXXXX",
+      appId: "XXXXXX"
+    };
 
-  <div class="balls" id="balls"></div>
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+    const matchRef = db.ref("match");
 
-  <div class="status" id="status">Waiting for update...</div>
-</div>
+    matchRef.on("value", (snapshot) => {
+      const data = snapshot.val();
+      if (!data) return;
 
-<!-- Firebase -->
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-
-<script>
-var firebaseConfig = {
-  apiKey: "AIzaSyANc7oEJrzQrIN9lCaitcoUKL9Ftqg6L-w",
-  authDomain: "umang2026-440bc.firebaseapp.com",
-  databaseURL: "https://umang2026-440bc-default-rtdb.firebaseio.com",
-  projectId: "umang2026-440bc",
-  storageBucket: "umang2026-440bc.appspot.com",
-  messagingSenderId: "6507613214",
-  appId: "1:6507613214:web:f4731ebf83cecb261466f"
-};
-
-firebase.initializeApp(firebaseConfig);
-
-firebase.database().ref("match").on("value", function(snapshot) {
-  var d = snapshot.val();
-  if (!d) return;
-
-  document.getElementById("teams").innerText = d.teamA + " vs " + d.teamB;
-  document.getElementById("score").innerText = d.runs + " / " + d.wickets;
-  document.getElementById("overs").innerText = "Overs: " + d.overs;
-  document.getElementById("status").innerText = d.status;
-
-  document.getElementById("striker").innerText = d.striker;
-  document.getElementById("nonStriker").innerText = d.nonStriker;
-  document.getElementById("bowler").innerText = "Bowler: " + d.bowler;
-
-  // BALL DISPLAY
-  var ballsDiv = document.getElementById("balls");
-  ballsDiv.innerHTML = "";
-
-  var lastBall = null;
-
-  if (d.balls) {
-    Object.values(d.balls).forEach(ball => {
-      lastBall = ball;
-      var div = document.createElement("div");
-      div.classList.add("ball");
-      div.innerText = ball;
-
-      if (ball == 6) div.classList.add("six");
-      else if (ball == 4) div.classList.add("four");
-      else if (ball == "W") div.classList.add("wicket");
-
-      ballsDiv.appendChild(div);
+      document.getElementById("teams").innerText = data.teamA + " vs " + data.teamB;
+      document.getElementById("score").innerText = data.runs + "/" + data.wickets;
+      document.getElementById("overs").innerText = "Overs: " + data.overs;
+      document.getElementById("status").innerText = "Status: " + data.status;
     });
-  }
-
-  // STRIKE LOGIC
-  document.getElementById("strikerArrow").style.visibility = "visible";
-  document.getElementById("nonStrikerArrow").style.visibility = "hidden";
-
-  if (lastBall !== null && lastBall !== "W" && lastBall % 2 === 1) {
-    document.getElementById("strikerArrow").style.visibility = "hidden";
-    document.getElementById("nonStrikerArrow").style.visibility = "visible";
-  }
-});
-</script>
-
+  </script>
 </body>
 </html>
