@@ -23,12 +23,14 @@ body {
 }
 
 .card {
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(10px);
-  border-radius: 16px;
-  padding: 25px;
-  width: 380px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(18px);
+  border-radius: 20px;
+  padding: 28px;
+  width: 390px;
+  margin-top: 80px;   /* 👈 ADDED */
+  box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+  animation: fadeIn 1s ease;
 }
 
 h1 {
@@ -248,4 +250,5 @@ firebase.database().ref("match").on("value", function(snapshot) {
 
 </body>
 </html>
+
 
