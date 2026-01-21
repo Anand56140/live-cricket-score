@@ -6,61 +6,96 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
+/* ---------- GLOBAL ---------- */
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
-  font-family: 'Segoe UI', sans-serif;
+  font-family: 'Poppins', 'Segoe UI', sans-serif;
   background:
-    linear-gradient(rgba(3,4,94,0.6), rgba(2,62,138,0.6)),
+    linear-gradient(135deg, rgba(3,4,94,0.75)),
     url("img3.jpg");
   background-size: cover;
   background-position: center;
-  background-repeat: no-repeat;
   color: #fff;
+  min-height: 100vh;
+}
+
+/* ---------- PAGE LAYOUT ---------- */
+.page {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  height: 100vh;
+  padding-top: 90px;
+  padding-bottom: 40px;
 }
 
+/* ---------- WELCOME ---------- */
+.welcome {
+  font-size: 36px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  margin-bottom: 25px;
+  color: #caf0f8;
+  text-shadow: 0 0 25px rgba(0,180,216,0.9);
+  animation: glow 2s infinite alternate;
+}
+
+@keyframes glow {
+  from { text-shadow: 0 0 10px rgba(0,180,216,0.5); }
+  to   { text-shadow: 0 0 30px rgba(0,180,216,1); }
+}
+
+/* ---------- CARD ---------- */
 .card {
-  background: rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(18px);
-  border-radius: 20px;
-  padding: 28px;
-  width: 390px;
-  margin-top: 80px;   /* 👈 ADDED */
-  box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-  animation: fadeIn 1s ease;
+  width: 380px;
+  background: rgba(255,255,255,0.12);
+  backdrop-filter: blur(15px);
+  border-radius: 18px;
+  padding: 26px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.45);
+  animation: slideUp 0.8s ease;
 }
 
+@keyframes slideUp {
+  from { transform: translateY(40px); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+
+/* ---------- HEAD ---------- */
 h1 {
   text-align: center;
   font-size: 20px;
   color: #90e0ef;
+  margin-bottom: 10px;
 }
 
 .score {
-  font-size: 40px;
-  font-weight: bold;
+  font-size: 42px;
+  font-weight: 800;
   text-align: center;
 }
 
 .overs {
   text-align: center;
   color: #ade8f4;
+  margin-bottom: 15px;
 }
 
+/* ---------- PLAYERS ---------- */
 .players {
-  margin-top: 15px;
-  background: rgba(255,255,255,0.05);
-  padding: 12px;
-  border-radius: 10px;
+  background: rgba(255,255,255,0.08);
+  padding: 14px;
+  border-radius: 12px;
 }
 
 .player {
   display: flex;
   justify-content: space-between;
-  margin: 6px 0;
+  margin: 8px 0;
+  font-size: 15px;
 }
 
 .arrow {
@@ -68,6 +103,15 @@ h1 {
   margin-right: 6px;
 }
 
+/* ---------- BOWLER ---------- */
+.bowler {
+  text-align: center;
+  margin-top: 8px;
+  color: #ffd166;
+  font-size: 14px;
+}
+
+/* ---------- BALLS ---------- */
 .balls {
   display: flex;
   justify-content: space-between;
@@ -75,107 +119,102 @@ h1 {
 }
 
 .ball {
-  width: 45px;
-  height: 45px;
+  width: 46px;
+  height: 46px;
   border-radius: 50%;
   background: #0077b6;
   display: flex;
   justify-content: center;
   align-items: center;
   font-weight: bold;
+  box-shadow: inset 0 0 8px rgba(255,255,255,0.4);
 }
 
 .ball.six { background: #38b000; }
 .ball.four { background: #ffb703; color: #000; }
 .ball.wicket { background: #d00000; }
 
+/* ---------- EXTRAS ---------- */
 .extras {
   display: flex;
   justify-content: space-around;
-  margin-top: 12px;
+  margin-top: 14px;
   font-size: 14px;
   color: #ffd166;
 }
 
+/* ---------- STATUS ---------- */
 .status {
   text-align: center;
-  margin-top: 10px;
-  color: #48cae4;
+  margin-top: 12px;
   font-size: 14px;
+  color: #48cae4;
 }
 
-.bowler {
-  text-align: center;
-  margin-top: 6px;
-  font-size: 15px;
-  color: #ffd166;
-}
-
-.welcome {
-  position: absolute;
-  top: 25px;
-  width: 100%;
-  text-align: center;
-  font-size: 34px;
-  font-weight: bold;
-  letter-spacing: 2px;
-  color: #caf0f8;
-  text-shadow: 0 4px 10px rgba(0,0,0,0.6);
+/* ---------- MOBILE ---------- */
+@media (max-width: 420px) {
+  .card { width: 92%; }
+  .welcome { font-size: 28px; }
 }
 </style>
 </head>
 
 <body>
 
-<div class="welcome">WELCOME TO ANAND'S WEB</div>
+<div class="page">
 
-<div class="card">
-  <h1 id="teams">Team A vs Team B</h1>
+  <div class="welcome">WELCOME TO ANAND'S WEB</div>
 
-  <div class="score" id="score">0 / 0</div>
-  <div class="overs" id="overs">Overs: 0.0</div>
+  <div class="card">
+    <h1 id="teams">Team A vs Team B</h1>
 
-  <div class="players">
-    <div class="player">
-      <div>
-        <span id="strikerArrow" class="arrow">▶</span>
-        <span id="striker">Striker</span>
+    <div class="score" id="score">0 / 0</div>
+    <div class="overs" id="overs">Overs: 0.0</div>
+
+    <div class="players">
+      <div class="player">
+        <div>
+          <span id="strikerArrow" class="arrow">▶</span>
+          <span id="striker">Striker</span>
+        </div>
+        <div>
+          <span id="strikerRuns">0</span> (<span id="strikerBalls">0</span>)
+        </div>
       </div>
-      <div>
-        <span id="strikerRuns">0</span> (<span id="strikerBalls">0</span>)
+
+      <div class="player">
+        <div>
+          <span id="nonStrikerArrow" class="arrow" style="visibility:hidden;">▶</span>
+          <span id="nonStriker">Non-Striker</span>
+        </div>
+        <div>
+          <span id="nonStrikerRuns">0</span> (<span id="nonStrikerBalls">0</span>)
+        </div>
+      </div>
+
+      <div class="player">
+        <div>Run Rate</div>
+        <div id="strikeRate">0.00</div>
       </div>
     </div>
 
-    <div class="player">
-      <div>
-        <span id="nonStrikerArrow" class="arrow" style="visibility:hidden;">▶</span>
-        <span id="nonStriker">Non-Striker</span>
-      </div>
-      <div>
-        <span id="nonStrikerRuns">0</span> (<span id="nonStrikerBalls">0</span>)
-      </div>
+    <div class="bowler" id="bowler">Bowler: -</div>
+    <div class="bowler" id="bowlerRuns">Runs Conceded: 0</div>
+    <div class="bowler" id="bowlerWickets">Wickets Taken: 0</div>
+
+    <div class="balls" id="balls"></div>
+
+    <div class="extras">
+      <div>Wide: <span id="wide">0</span></div>
+      <div>No-Ball: <span id="noBall">0</span></div>
     </div>
 
-    <div class="player">
-      <div>Run Rate</div>
-      <div id="strikeRate">0.00</div>
-    </div>
+    <div class="status" id="status">Waiting for update...</div>
   </div>
 
-  <div class="bowler" id="bowler">Bowler: -</div>
-  <div class="bowler" id="bowlerRuns">Runs Conceded: 0</div>
-  <div class="bowler" id="bowlerWickets">Wickets Taken: 0</div>
-
-  <div class="balls" id="balls"></div>
-
-  <div class="extras">
-    <div>Wide: <span id="wide">0</span></div>
-    <div>No-Ball: <span id="noBall">0</span></div>
-  </div>
-
-  <div class="status" id="status">Waiting for update...</div>
 </div>
 
+<!-- 🔥 YOUR FIREBASE JS REMAINS SAME BELOW 🔥 -->
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 
@@ -250,5 +289,3 @@ firebase.database().ref("match").on("value", function(snapshot) {
 
 </body>
 </html>
-
-
